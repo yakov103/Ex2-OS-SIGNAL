@@ -19,9 +19,55 @@ void handler(int sig)
 {
     val += 5;
 }
+pid_t pid;
+int counter = 0;
+void handler1(int sig)
+{
+    counter++;
+    printf("Signal 3  SIGUSR  going to counter = %d\n", counter);
+    /* Flushes the printed string to stdout */
+    fflush(stdout);
+    kill(pid, SIGUSR1);
+}
+void handler2(int sig)
+{
+    counter += 3;
+    printf("Signal 4  SIGUSR OF SUN   going to counter =%d\n", counter);
+    exit(0);
+}
+  
+
+// send part of ex with 2 more signals . 
+void second_part_signals (){
+pid_t p;
+    int status;
+    signal(SIGUSR1, handler1);
+    if ((pid = fork()) == 0)
+    {
+        signal(SIGUSR1, handler2);
+        kill(getppid(), SIGUSR1);
+        while(1) ;
+    }
+    if ((p = wait(&status)) > 0)
+    {
+        counter += 4;
+        printf("counter = %d\n", counter);
+		printf(" ok , now try to quit with CONTROL C one more time !!!!! \n"); 
+		signal(SIGQUIT,handle_sigint);
+    	while (i){
+		} 
+		
+		printf("ok that was signal 5 so bye bye !" );
+		exit(0); 
+		    }
 
 
 
+
+}
+
+
+// here the process is start with 2 signals . 
 int main (){
 
 		
@@ -47,16 +93,9 @@ int main (){
     	while (i){
 		} 
 		i= 2; 
-		pid_t pidpid;
-		signal(SIGCHLD, handler);
-    	if ((pidpid = fork()) == 0)
-    	{
-        val -= 3;
-        exit(0);
-   	 }    printf("val = %d\n", val);
 
-    waitpid(pid, NULL, 0);
-
+ 	   waitpid(pid, NULL, 0);
+		second_part_signals();
 
 		}
 		wait (NULL);
